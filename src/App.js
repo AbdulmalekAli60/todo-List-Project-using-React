@@ -1,7 +1,7 @@
 import "./App.css";
 import TodoList from "./components/TodoList";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { blue, green } from '@mui/material/colors';
+import { blue, green,red } from '@mui/material/colors';
 function App() {
   const theme = createTheme({
     palette: {
@@ -13,6 +13,9 @@ function App() {
       },
       success: {
         main: green[700],
+      },
+      danger:{
+        main:red[700],
       },
     },
   });
