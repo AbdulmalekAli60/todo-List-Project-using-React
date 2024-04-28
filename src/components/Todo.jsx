@@ -11,7 +11,7 @@ export default function Todo() {
   return (
     <>
       <Card
-      className="todoCard"
+        className="todoCard"
         sx={{
           minWidth: 275,
           background: "#283593",

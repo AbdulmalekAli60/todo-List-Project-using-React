@@ -1,40 +1,35 @@
 import "./App.css";
 import TodoList from "./components/TodoList";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { blue, green,red } from '@mui/material/colors';
-function App() {
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: blue[500],
-      },
-      secondary: {
-        main: '#f44336',
-      },
-      success: {
-        main: green[700],
-      },
-      danger:{
-        main:red[700],
-      },
-    },
-  });
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+
+const theme = createTheme({
+ typography:{
+  fontFamily:[
+    'Alexandria',
+  ],
+ },
+ direction: "rtl",
+});
+
+function App() {
+  
   return (
+    document.dir = "rtl",
     <ThemeProvider theme={theme}>
-    <div
-      className="App"
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background:"#191b1f",
-        height:"100vh",
-        direction:"rtl",
-      }}
-    >
-      <TodoList />
-    </div>
+      <div
+        className="App"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "#191b1f",
+          height: "100vh",
+          direction: "rtl",          
+        }}
+      >
+        <TodoList />
+      </div>
     </ThemeProvider>
   );
 }
