@@ -7,7 +7,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
-export default function Todo() {
+export default function Todo({title, description}) {
   return (
     <>
       <Card
@@ -25,10 +25,10 @@ export default function Todo() {
           <Grid container spacing={2}>
             <Grid xs={8}>
               <Typography variant="h5" style={{ textAlign: "start" }}>
-                المهة الأولى
+                {title}
               </Typography>
               <Typography variant="h6" style={{ textAlign: "start" }}>
-                التفاصيل الخاصة بالمهمة الأولى
+                {description}
               </Typography>
             </Grid>
 
@@ -37,7 +37,8 @@ export default function Todo() {
               style={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-around",
+                justifyContent: "flex-end",
+                gap:"5px"
               }}
             >
               <IconButton

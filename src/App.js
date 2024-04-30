@@ -9,7 +9,6 @@ const theme = createTheme({
     'Alexandria',
   ],
  },
- direction: "rtl",
 });
 
 function App() {
@@ -24,8 +23,8 @@ function App() {
           justifyContent: "center",
           alignItems: "center",
           background: "#191b1f",
-          height: "100vh",
-          direction: "rtl",          
+          direction: "rtl",      
+          height: "100vh",  
         }}
       >
         <TodoList />

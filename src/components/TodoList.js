@@ -13,12 +13,43 @@ import Button from "@mui/material/Button";
 // Components
 import Todo from "./Todo";
 
+// Libraries
+import {v4 as uuidv4} from 'uuid'; // i will us this library in this file as uuidv4
+
+const todoseList = [
+  {
+    id: uuidv4(),
+    title: "المهمة الأولى",
+    description: "التفاصيل الخاصة بالمهمة الأولى",
+    isCompleted: "false",
+  },
+  {
+    id: uuidv4(),
+    title: "المهمة الثانية",
+    description: "التفاصيل الخاصة بالمهمة الثانية",
+    isCompleted: "false",
+  },
+  {
+    id: uuidv4(),
+    title: "المهمة الثالثة",
+    description: "التفاصيل الخاصة بالمهمة الثالثة",
+    isCompleted: "false",
+  },
+];
+
+const todos = todoseList.map((todo) =>{
+  return (<Todo key={todo.id} title={todo.title} description={todo.description} />);
+});
+
 export default function TodoList() {
   return (
     <>
-      <Container maxWidth="sm">
+      <Container maxWidth="sm" style={{ display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",}} >
         <Card sx={{ minWidth: 275 }} color="text.secondary" gutterBottom>
-          <CardContent>
+          <CardContent  style={{height: "calc(100vh - 130px)", overflow: "scroll" ,scrollbarWidth: "none" }}>
             <Typography style={{ fontWeight: "bold" }} variant="h2">
               مهامي
             </Typography>
@@ -37,17 +68,17 @@ export default function TodoList() {
             {/*==== Filter Buttons====*/}
 
             {/* Todos */}
-            <Todo />
+            {/* <Todo /> */}
+            {todos}
             {/* ======Todos==== */}
 
             {/* Input + add */}
-            <Grid style={{marginTop: "20px",}} container spacing={2}>
+            <Grid style={{ marginTop: "20px" }} container spacing={2}>
               <Grid
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-around",
-                  
                 }}
                 xs={8}
               >
@@ -67,7 +98,12 @@ export default function TodoList() {
                 }}
                 xs={4}
               >
-                <Button style={{width:"100%",height:"100%",}} variant="contained">إضافة</Button>
+                <Button
+                  style={{ width: "100%", height: "100%" }}
+                  variant="contained"
+                >
+                  إضافة
+                </Button>
               </Grid>
             </Grid>
             {/*=== Input + add ===*/}
