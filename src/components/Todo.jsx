@@ -7,7 +7,11 @@ import CheckIcon from "@mui/icons-material/Check";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
-export default function Todo({title, description}) {
+export default function Todo({ todo, handleCheck }) {
+  function handleCheckClick(todoId) {
+    handleCheck(todoId);
+  }
+
   return (
     <>
       <Card
@@ -25,10 +29,10 @@ export default function Todo({title, description}) {
           <Grid container spacing={2}>
             <Grid xs={8}>
               <Typography variant="h5" style={{ textAlign: "start" }}>
-                {title}
+                {todo.title}
               </Typography>
               <Typography variant="h6" style={{ textAlign: "start" }}>
-                {description}
+                {todo.description}
               </Typography>
             </Grid>
 
@@ -38,19 +42,24 @@ export default function Todo({title, description}) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "flex-end",
-                gap:"5px"
+                gap: "5px",
               }}
             >
+              {/* Check icon */}
               <IconButton
+                onClick={() => {
+                  handleCheckClick(todo.id);
+                }}
                 className="iconBtn"
                 style={{
-                  color: "#9bc34a",
-                  background: "white",
-                  border: "solid #9bc34a 3px ",
+                  color: todo.isCompleted ? "white" : "#8bc34a",
+                  background: todo.isCompleted ? "#8bc34a" : "white",
+                  border: "solid #8bc34a 3px ",
                 }}
               >
-                <CheckIcon color="success" />
+                <CheckIcon />
               </IconButton>
+              {/*== Check icon ==*/}
 
               <IconButton
                 className="iconBtn"

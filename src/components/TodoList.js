@@ -9,47 +9,85 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Grid from "@mui/material/Unstable_Grid2";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
+import { useState } from "react";
 // Components
 import Todo from "./Todo";
 
 // Libraries
-import {v4 as uuidv4} from 'uuid'; // i will us this library in this file as uuidv4
+import { v4 as uuidv4 } from "uuid"; // i will us this library in this file as uuidv4
 
-const todoseList = [
+const initialTodosValue = [
   {
     id: uuidv4(),
     title: "المهمة الأولى",
     description: "التفاصيل الخاصة بالمهمة الأولى",
-    isCompleted: "false",
+    isCompleted: false,
   },
   {
     id: uuidv4(),
     title: "المهمة الثانية",
     description: "التفاصيل الخاصة بالمهمة الثانية",
-    isCompleted: "false",
+    isCompleted: false,
   },
   {
     id: uuidv4(),
     title: "المهمة الثالثة",
     description: "التفاصيل الخاصة بالمهمة الثالثة",
-    isCompleted: "false",
+    isCompleted: false,
   },
 ];
 
-const todos = todoseList.map((todo) =>{
-  return (<Todo key={todo.id} title={todo.title} description={todo.description} />);
-});
-
 export default function TodoList() {
+  const [Tasks, setNewTask] = useState(initialTodosValue);
+  const [titleInput,setTitleInput] = useState("")
+
+  const todos = Tasks.map((todo) => {
+    return (
+      <Todo key={todo.id} todo={todo} handleCheck={handleCheckClick} /> //! passing a function to child so i can chaneg the state from there
+    );
+  });
+
+  function handleAddClick() {
+    const NewTask = {
+     id: uuidv4(),
+     title: titleInput,
+     description:"",
+     isCompleted:false, 
+    };
+    setNewTask([...Tasks, NewTask]);
+    setTitleInput("");
+  };
+
+  function handleCheckClick(id){ // id sent from child component "Todo"
+// alert("clicked  " + id)
+    const updatedTodos = Tasks.map((t) => {
+
+      if(t.id === id){
+        return { ...t, isCompleted: !t.isCompleted };
+      };
+      return t;
+    });
+    setNewTask([...updatedTodos]);
+  }
   return (
     <>
-      <Container maxWidth="sm" style={{ display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",}} >
+      <Container
+        maxWidth="sm"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "100vh",
+        }}
+      >
         <Card sx={{ minWidth: 275 }} color="text.secondary" gutterBottom>
-          <CardContent  style={{height: "calc(100vh - 130px)", overflow: "scroll" ,scrollbarWidth: "none" }}>
+          <CardContent
+            style={{
+              height: "calc(100vh - 130px)",
+              overflow: "scroll",
+              scrollbarWidth: "none",
+            }}
+          >
             <Typography style={{ fontWeight: "bold" }} variant="h2">
               مهامي
             </Typography>
@@ -87,6 +125,8 @@ export default function TodoList() {
                   label="عنوان المهمة"
                   variant="outlined"
                   style={{ width: "100%" }}
+                  value={titleInput}
+                  onChange={(event) => {setTitleInput(event.target.value)}}
                 />
               </Grid>
 
@@ -101,6 +141,9 @@ export default function TodoList() {
                 <Button
                   style={{ width: "100%", height: "100%" }}
                   variant="contained"
+                  onClick={() => {
+                    handleAddClick();
+                  }}
                 >
                   إضافة
                 </Button>
