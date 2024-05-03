@@ -9,41 +9,24 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Grid from "@mui/material/Unstable_Grid2";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useState } from "react";
+import { TasksContext } from "../Contexts/TasksContext";
 // Components
 import Todo from "./Todo";
 
 // Libraries
 import { v4 as uuidv4 } from "uuid"; // i will us this library in this file as uuidv4
 
-const initialTodosValue = [
-  {
-    id: uuidv4(),
-    title: "المهمة الأولى",
-    description: "التفاصيل الخاصة بالمهمة الأولى",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "المهمة الثانية",
-    description: "التفاصيل الخاصة بالمهمة الثانية",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "المهمة الثالثة",
-    description: "التفاصيل الخاصة بالمهمة الثالثة",
-    isCompleted: false,
-  },
-];
+//Hocks
+import { useState } from "react";
+import { useContext } from "react";
 
 export default function TodoList() {
-  const [Tasks, setNewTask] = useState(initialTodosValue);
+  const { Tasks, setNewTask } = useContext(TasksContext);
   const [titleInput,setTitleInput] = useState("")
 
   const todos = Tasks.map((todo) => {
     return (
-      <Todo key={todo.id} todo={todo} handleCheck={handleCheckClick} /> //! passing a function to child so i can chaneg the state from there
+      <Todo key={todo.id} todo={todo}/> 
     );
   });
 
@@ -58,17 +41,6 @@ export default function TodoList() {
     setTitleInput("");
   };
 
-  function handleCheckClick(id){ // id sent from child component "Todo"
-// alert("clicked  " + id)
-    const updatedTodos = Tasks.map((t) => {
-
-      if(t.id === id){
-        return { ...t, isCompleted: !t.isCompleted };
-      };
-      return t;
-    });
-    setNewTask([...updatedTodos]);
-  }
   return (
     <>
       <Container

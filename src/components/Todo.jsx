@@ -7,9 +7,23 @@ import CheckIcon from "@mui/icons-material/Check";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
-export default function Todo({ todo, handleCheck }) {
-  function handleCheckClick(todoId) {
-    handleCheck(todoId);
+import { TasksContext } from "../Contexts/TasksContext";
+import { useContext } from "react";
+
+
+export default function Todo({todo}) {
+
+  const {Tasks, setNewTask} = useContext(TasksContext);
+
+  function handleCheckClick() {
+    const updatedTodos = Tasks.map((t) => {
+
+      if(t.id === todo.id) {
+        return { ...t, isCompleted: !t.isCompleted };
+      };
+      return t;
+    });
+    setNewTask([...updatedTodos]);
   }
 
   return (
@@ -48,12 +62,12 @@ export default function Todo({ todo, handleCheck }) {
               {/* Check icon */}
               <IconButton
                 onClick={() => {
-                  handleCheckClick(todo.id);
+                  handleCheckClick(Tasks.id);
                 }}
                 className="iconBtn"
                 style={{
-                  color: todo.isCompleted ? "white" : "#8bc34a",
-                  background: todo.isCompleted ? "#8bc34a" : "white",
+                  color: Tasks.isCompleted ? "white" : "#8bc34a",
+                  background: Tasks.isCompleted ? "#8bc34a" : "white",
                   border: "solid #8bc34a 3px ",
                 }}
               >
