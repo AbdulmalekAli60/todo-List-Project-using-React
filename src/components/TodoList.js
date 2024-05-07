@@ -22,24 +22,22 @@ import { useContext } from "react";
 
 export default function TodoList() {
   const { Tasks, setNewTask } = useContext(TasksContext);
-  const [titleInput,setTitleInput] = useState("")
+  const [titleInput, setTitleInput] = useState("");
 
   const todos = Tasks.map((todo) => {
-    return (
-      <Todo key={todo.id} todo={todo}/> 
-    );
+    return <Todo key={todo.id} todo={todo} />;
   });
 
   function handleAddClick() {
     const NewTask = {
-     id: uuidv4(),
-     title: titleInput,
-     description:"",
-     isCompleted:false, 
+      id: uuidv4(),
+      title: titleInput,
+      description: "",
+      isCompleted: false,
     };
     setNewTask([...Tasks, NewTask]);
     setTitleInput("");
-  };
+  }
 
   return (
     <>
@@ -98,7 +96,9 @@ export default function TodoList() {
                   variant="outlined"
                   style={{ width: "100%" }}
                   value={titleInput}
-                  onChange={(event) => {setTitleInput(event.target.value)}}
+                  onChange={(event) => {
+                    setTitleInput(event.target.value);
+                  }}
                 />
               </Grid>
 
