@@ -8,6 +8,7 @@ import { useState } from "react";
 //Library
 import { v4 as uuidv4 } from "uuid";
 
+
 const theme = createTheme({
   typography: {
     fontFamily: ["Alexandria"],
@@ -54,6 +55,7 @@ function App() {
               height: "100vh",
             }}
           >
+
             <TodoList />
           </div>
         </ThemeProvider>
@@ -61,5 +63,4 @@ function App() {
     )
   );
 }
-
 export default App;

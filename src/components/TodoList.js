@@ -10,8 +10,13 @@ import Grid from "@mui/material/Unstable_Grid2";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { TasksContext } from "../Contexts/TasksContext";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 // Components
 import Todo from "./Todo";
+import Alert from "./Alert";
 
 // Libraries
 import { v4 as uuidv4 } from "uuid"; // i will us this library in this file as uuidv4
@@ -22,25 +27,116 @@ import { useContext } from "react";
 
 export default function TodoList() {
   const { Tasks, setNewTask } = useContext(TasksContext);
-  const [titleInput, setTitleInput] = useState("");
-
+  const [showAlert, setShowAlert] = useState(false);
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [addDialogInputs, setAddDialogInputs] = useState({
+    title: "",
+    description: "",
+  });
   const todos = Tasks.map((todo) => {
     return <Todo key={todo.id} todo={todo} />;
   });
 
-  function handleAddClick() {
+  //Handlers
+  // function handleAddClick() {//add a new task
+  //   const NewTask = {
+  //     id: uuidv4(),
+  //     title: titleInput,
+  //     description: "",
+  //     isCompleted: false,
+  //   };
+  //   setNewTask([...Tasks, NewTask]);
+  //   setShowAlert(true);
+  //   setTimeout(() => setShowAlert(false), 3000);
+  //   setTitleInput("");
+  // }
+  function handleAddDialogClose() {
+    //Clicking at any location will close the dialog
+    setShowAddDialog(false);
+  }
+  function handleAddConfirm() {
+    //confrim inside dialog
+    // alert("added")
+    if(addDialogInputs.title === "" || addDialogInputs.description === "") {
+      alert("يجب عليك تعبئة جميع الحقول")
+      return
+    }
     const NewTask = {
       id: uuidv4(),
-      title: titleInput,
-      description: "",
+      title: addDialogInputs.title,
+      description: addDialogInputs.description,
       isCompleted: false,
     };
     setNewTask([...Tasks, NewTask]);
-    setTitleInput("");
+    setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 3000);
+    setShowAddDialog(false);
   }
-
+  function showAddingDialog() {
+    setShowAddDialog(true);
+  }
+  //Handlers
   return (
     <>
+      {/* Add Dialog */}
+      <Dialog
+        onClose={handleAddDialogClose}
+        open={showAddDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title"> اضافة مهمة جديدة </DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="title"
+            name="title"
+            label="العنوان"
+            fullWidth
+            variant="standard"
+            value={addDialogInputs.title}
+            onChange={(event) => {
+              setAddDialogInputs({
+                ...addDialogInputs,
+                title: event.target.value,
+              });
+            }}
+          />
+
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="description"
+            name="description"
+            label="تفاصيل المهمة"
+            fullWidth
+            variant="standard"
+            value={addDialogInputs.description}
+            onChange={(event) => {
+              setAddDialogInputs({
+                ...addDialogInputs,
+                description: event.target.value,
+              });
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAddDialogClose}>إغلاق</Button>
+          <Button
+            onClick={handleAddConfirm}
+            style={{ color: "#8bc34a" }}
+            autoFocus
+          >
+            أضافة
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Alert message="تم تغيير بيانات المهمة بنجاح" openSnack={showAlert} />
+
+      {/* === Add Dialog === */}
       <Container
         maxWidth="sm"
         style={{
@@ -90,7 +186,7 @@ export default function TodoList() {
                 }}
                 xs={8}
               >
-                <TextField
+                {/* <TextField
                   id="outlined-basic"
                   label="عنوان المهمة"
                   variant="outlined"
@@ -99,7 +195,7 @@ export default function TodoList() {
                   onChange={(event) => {
                     setTitleInput(event.target.value);
                   }}
-                />
+                /> */}
               </Grid>
 
               <Grid
@@ -108,17 +204,18 @@ export default function TodoList() {
                   alignItems: "center",
                   justifyContent: "space-around",
                 }}
-                xs={4}
+                xs={12}
               >
                 <Button
                   style={{ width: "100%", height: "100%" }}
                   variant="contained"
                   onClick={() => {
-                    handleAddClick();
+                    showAddingDialog();
                   }}
                 >
                   إضافة
                 </Button>
+                <Alert message="تمت الاضافة بنجاح" openSnack={showAlert} />
               </Grid>
             </Grid>
             {/*=== Input + add ===*/}

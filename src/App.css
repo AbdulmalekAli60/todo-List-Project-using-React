@@ -47,3 +47,7 @@
   font-weight: bold;
 }
 /* =====///// Custom Fonts /////===== */
+
+.MuiSnackbarContent-action {
+  background-color: red !important;
+}

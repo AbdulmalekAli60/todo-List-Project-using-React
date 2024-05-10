@@ -8,6 +8,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 // Icons
 import CheckIcon from "@mui/icons-material/Check";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -18,10 +19,16 @@ import { useContext } from "react";
 import { useState } from "react";
 
 //Components
-
+import Alert from "./Alert";
 export default function Todo({ todo }) {
   const { Tasks, setNewTask } = useContext(TasksContext);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
+  const [UpdateDialogInputs, setUpdateDialogInputs] = useState({
+    title: todo.title, //inisital values
+    description: todo.description,
+  });
+  const [showAlert, setShowAlert] = useState(false);
 
   //Event Handlers
   function handleCheckClick() {
@@ -38,13 +45,44 @@ export default function Todo({ todo }) {
     setShowDeleteDialog(true);
   }
 
-  function handleClose() {
+  function handleDeleteDialogClose() {
     //Clicking at any location will close the dialog
     setShowDeleteDialog(false);
   }
 
   function handelDeleteConfirm() {
     setNewTask(Tasks.filter((t) => t.id !== todo.id)); //creates a new array by filtering the Tasks array. It checks each element (t) in the array and keeps only the elements where the id doesn't match the id of the todo item
+    setShowAlert(true); 
+    setTimeout(() => setShowAlert(false), 3000);
+  }
+
+  function handleUpdateClose() {
+    // for closing insode the dialog
+    setShowUpdateDialog(false);
+  }
+
+  function handleUpdateClick() {
+    // for the button on the card
+    setShowUpdateDialog(true);
+  }
+  function handleUpdateConfirm() {
+    // for clicking confirm inside the update dialog
+    const UpdateExistigTodo = Tasks.map((t) => {
+      if (t.id === todo.id) {
+        return {
+          ...t,
+          title: UpdateDialogInputs.title,
+          description: UpdateDialogInputs.description,
+        };
+      } else {
+        // if the id doesn't match the id of the todo item i clicked, it will return the original todo item
+        return t;
+      }
+    });
+    setNewTask(UpdateExistigTodo);
+    setShowUpdateDialog(false);
+    setShowAlert(true); 
+    setTimeout(() => setShowAlert(false), 3000);
   }
   // Event Handelers
 
@@ -52,7 +90,7 @@ export default function Todo({ todo }) {
     <>
       {/* confirm Delete Dialog */}
       <Dialog
-        onClose={handleClose}
+        onClose={handleDeleteDialogClose}
         open={showDeleteDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -66,7 +104,7 @@ export default function Todo({ todo }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>إغلاق</Button>
+          <Button onClick={handleDeleteDialogClose}>إغلاق</Button>
           <Button
             onClick={handelDeleteConfirm}
             style={{ color: "red" }}
@@ -76,7 +114,69 @@ export default function Todo({ todo }) {
           </Button>
         </DialogActions>
       </Dialog>
+      <Alert message={"تم حذف المهمة بنجاح"} openSnack={showAlert}/>
+
       {/*=== confirm Delete Dialog === */}
+
+      {/* Update Dialog */}
+      <Dialog
+        onClose={handleUpdateClose}
+        open={showUpdateDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">تغيير بيانات المهمة</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="title"
+            name="title"
+            label="العنوان"
+            fullWidth
+            variant="standard"
+            value={UpdateDialogInputs.title}
+            onChange={(event) => {
+              setUpdateDialogInputs({
+                ...UpdateDialogInputs,
+                title: event.target.value,
+              });
+            }}
+          />
+
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="description"
+            name="description"
+            label="تفاصيل المهمة"
+            fullWidth
+            variant="standard"
+            value={UpdateDialogInputs.description}
+            onChange={(event) => {
+              setUpdateDialogInputs({
+                ...UpdateDialogInputs,
+                description: event.target.value,
+              });
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleUpdateClose}>إغلاق</Button>
+          <Button
+            onClick={handleUpdateConfirm}
+            style={{ color: "#8bc34a" }}
+            autoFocus
+          >
+            تعديل
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Alert message="تم تغيير بيانات المهمة بنجاح" openSnack={showAlert} />
+
+      {/* === Update Dialog === */}
 
       <Card
         className="todoCard"
@@ -125,6 +225,7 @@ export default function Todo({ todo }) {
               </IconButton>
               {/*== Check icon ==*/}
 
+              {/* Edit icon */}
               <IconButton
                 className="iconBtn"
                 style={{
@@ -132,9 +233,11 @@ export default function Todo({ todo }) {
                   background: "white",
                   border: "solid #1769aa 3px ",
                 }}
+                onClick={handleUpdateClick}
               >
                 <ModeEditOutlineOutlinedIcon />
               </IconButton>
+              {/* == Edit icon == */}
 
               {/* Delete icon */}
               <IconButton
