@@ -24,6 +24,7 @@ import { v4 as uuidv4 } from "uuid"; // i will us this library in this file as u
 //Hocks
 import { useState } from "react";
 import { useContext } from "react";
+import { useEffect } from "react";
 
 export default function TodoList() {
   const { Tasks, setNewTask } = useContext(TasksContext);
@@ -33,33 +34,26 @@ export default function TodoList() {
     title: "",
     description: "",
   });
+
   const todos = Tasks.map((todo) => {
     return <Todo key={todo.id} todo={todo} />;
   });
 
-  //Handlers
-  // function handleAddClick() {//add a new task
-  //   const NewTask = {
-  //     id: uuidv4(),
-  //     title: titleInput,
-  //     description: "",
-  //     isCompleted: false,
-  //   };
-  //   setNewTask([...Tasks, NewTask]);
-  //   setShowAlert(true);
-  //   setTimeout(() => setShowAlert(false), 3000);
-  //   setTitleInput("");
-  // }
+  useEffect(() => {
+    const stroageTasks = JSON.parse(localStorage.getItem("tasks"));
+    setNewTask(stroageTasks);
+  }, []); // the second parameter is for when you want to call the the function, and its alwaye an array and you put inside it the "dependencies" determining when to call the function when they change
+
   function handleAddDialogClose() {
     //Clicking at any location will close the dialog
     setShowAddDialog(false);
   }
   function handleAddConfirm() {
     //confrim inside dialog
-    // alert("added")
-    if(addDialogInputs.title === "" || addDialogInputs.description === "") {
-      alert("يجب عليك تعبئة جميع الحقول")
-      return
+
+    if (addDialogInputs.title === "") {
+      alert("يجب عليك تعبئة جميع الحقول");
+      return;
     }
     const NewTask = {
       id: uuidv4(),
@@ -67,7 +61,9 @@ export default function TodoList() {
       description: addDialogInputs.description,
       isCompleted: false,
     };
+
     setNewTask([...Tasks, NewTask]);
+    localStorage.setItem("tasks", JSON.stringify([...Tasks, NewTask]));
     setShowAlert(true);
     setTimeout(() => setShowAlert(false), 3000);
     setShowAddDialog(false);
@@ -76,6 +72,7 @@ export default function TodoList() {
     setShowAddDialog(true);
   }
   //Handlers
+  
   return (
     <>
       {/* Add Dialog */}
@@ -185,18 +182,7 @@ export default function TodoList() {
                   justifyContent: "space-around",
                 }}
                 xs={8}
-              >
-                {/* <TextField
-                  id="outlined-basic"
-                  label="عنوان المهمة"
-                  variant="outlined"
-                  style={{ width: "100%" }}
-                  value={titleInput}
-                  onChange={(event) => {
-                    setTitleInput(event.target.value);
-                  }}
-                /> */}
-              </Grid>
+              ></Grid>
 
               <Grid
                 style={{

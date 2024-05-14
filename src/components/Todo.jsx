@@ -39,6 +39,7 @@ export default function Todo({ todo }) {
       return t;
     });
     setNewTask([...updatedTodos]);
+    localStorage.setItem("tasks", JSON.stringify(updatedTodos));
   }
 
   function handleDeleteClick() {
@@ -51,8 +52,10 @@ export default function Todo({ todo }) {
   }
 
   function handelDeleteConfirm() {
-    setNewTask(Tasks.filter((t) => t.id !== todo.id)); //creates a new array by filtering the Tasks array. It checks each element (t) in the array and keeps only the elements where the id doesn't match the id of the todo item
-    setShowAlert(true); 
+    const UpdatedTodos = Tasks.filter((t) => t.id !== todo.id);//creates a new array by filtering the Tasks array. It checks each element (t) in the array and keeps only the elements where the id doesn't match the id of the todo item
+    setNewTask(UpdatedTodos); 
+    localStorage.setItem("tasks", JSON.stringify(UpdatedTodos));
+    setShowAlert(true);
     setTimeout(() => setShowAlert(false), 3000);
   }
 
@@ -80,8 +83,9 @@ export default function Todo({ todo }) {
       }
     });
     setNewTask(UpdateExistigTodo);
+    localStorage.setItem("tasks", JSON.stringify(UpdateExistigTodo));
     setShowUpdateDialog(false);
-    setShowAlert(true); 
+    setShowAlert(true);
     setTimeout(() => setShowAlert(false), 3000);
   }
   // Event Handelers
@@ -114,7 +118,7 @@ export default function Todo({ todo }) {
           </Button>
         </DialogActions>
       </Dialog>
-      <Alert message={"تم حذف المهمة بنجاح"} openSnack={showAlert}/>
+      <Alert message={"تم حذف المهمة بنجاح"} openSnack={showAlert} />
 
       {/*=== confirm Delete Dialog === */}
 

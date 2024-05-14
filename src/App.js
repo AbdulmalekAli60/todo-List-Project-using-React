@@ -38,7 +38,7 @@ const initialTodosValue = [
 
 function App() {
   const [Tasks, setNewTask] = useState(initialTodosValue);
-
+  
   return (
     (document.dir = "rtl"),
     (
@@ -55,7 +55,7 @@ function App() {
               height: "100vh",
             }}
           >
-
+            
             <TodoList />
           </div>
         </ThemeProvider>
