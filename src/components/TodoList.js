@@ -17,7 +17,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 // Components
 import Todo from "./Todo";
 import Alert from "./Alert";
-
+import getDate from "./getDateAndTime";
 // Libraries
 import { v4 as uuidv4 } from "uuid"; // i will us this library in this file as uuidv4
 
@@ -34,7 +34,7 @@ export default function TodoList() {
     title: "",
     description: "",
   });
-  
+
   const [displayedTasksType, setDisplayedTasksType] = useState("all");
 
   //filtering array
@@ -78,8 +78,8 @@ export default function TodoList() {
   function handleAddConfirm() {
     //confrim inside dialog
 
-    if (addDialogInputs.title === "") {
-      alert("يجب عليك تعبئة جميع الحقول");
+    if (addDialogInputs.title === "" && addDialogInputs.description === "") {
+      alert("يجب عليك إضافة عنوان أو تفاصيل المهمة");
       return;
     }
     const NewTask = {
@@ -87,6 +87,7 @@ export default function TodoList() {
       title: addDialogInputs.title,
       description: addDialogInputs.description,
       isCompleted: false,
+      dateAndTime: getDate(),
     };
 
     setNewTask([...Tasks, NewTask]);
@@ -190,6 +191,7 @@ export default function TodoList() {
               aria-label="text alignment"
               style={{ marginTop: "30px", direction: "ltr" }}
               onChange={ChangedDisplayedType}
+              color="secondary"
             >
               <ToggleButton value="notCompleted">غير منجز</ToggleButton>
               <ToggleButton value="completed">منجز</ToggleButton>

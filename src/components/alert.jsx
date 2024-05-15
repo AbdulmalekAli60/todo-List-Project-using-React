@@ -12,13 +12,12 @@ export default function Alert({ message, openSnack }) {
   };
 
   return (
-    <Snackbar 
+    <Snackbar
       anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       open={open}
       autoHideDuration={3000} // Snackbar will be shown for 5 seconds
       onClose={handleClose}
       message={message}
     />
-    
   );
 }

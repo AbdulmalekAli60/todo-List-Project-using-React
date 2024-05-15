@@ -52,8 +52,8 @@ export default function Todo({ todo }) {
   }
 
   function handelDeleteConfirm() {
-    const UpdatedTodos = Tasks.filter((t) => t.id !== todo.id);//creates a new array by filtering the Tasks array. It checks each element (t) in the array and keeps only the elements where the id doesn't match the id of the todo item
-    setNewTask(UpdatedTodos); 
+    const UpdatedTodos = Tasks.filter((t) => t.id !== todo.id); //creates a new array by filtering the Tasks array. It checks each element (t) in the array and keeps only the elements where the id doesn't match the id of the todo item
+    setNewTask(UpdatedTodos);
     localStorage.setItem("tasks", JSON.stringify(UpdatedTodos));
     setShowAlert(true);
     setTimeout(() => setShowAlert(false), 3000);
@@ -196,7 +196,15 @@ export default function Todo({ todo }) {
         <CardContent>
           <Grid container spacing={2}>
             <Grid xs={8}>
-              <Typography variant="h5" style={{ textAlign: "start" }}>
+              <Typography
+                variant="h5"
+                style={{
+                  textAlign: "start",
+                  textDecoration: todo.isCompleted
+                    ? "line-through black"
+                    : "none",
+                }}
+              >
                 {todo.title}
               </Typography>
               <Typography variant="h6" style={{ textAlign: "start" }}>
@@ -258,6 +266,12 @@ export default function Todo({ todo }) {
               {/* == Delete icon == */}
             </Grid>
           </Grid>
+          <Typography
+            style={{ textAlign: "start", color: "#00e676" }}
+            variant="body2"
+          >
+            {todo.dateAndTime}
+          </Typography>
         </CardContent>
       </Card>
     </>
