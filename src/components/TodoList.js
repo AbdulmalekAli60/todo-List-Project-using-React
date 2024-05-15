@@ -34,8 +34,35 @@ export default function TodoList() {
     title: "",
     description: "",
   });
+  
+  const [displayedTasksType, setDisplayedTasksType] = useState("all");
 
-  const todos = Tasks.map((todo) => {
+  //filtering array
+  function ChangedDisplayedType(event) {
+    // console.log(event.target.value)
+    setDisplayedTasksType(event.target.value);
+  }
+
+  const completedTasks = Tasks.filter((t) => {
+    return t.isCompleted; //checks each element (t) in the array and keeps only the elements where the isCompleted is true
+  });
+
+  const notCompleted = Tasks.filter((t) => {
+    return !t.isCompleted;
+  });
+
+  let tasksToBeRendered = Tasks;
+
+  if (displayedTasksType === "completed") {
+    tasksToBeRendered = completedTasks;
+  } else if (displayedTasksType === "notCompleted") {
+    tasksToBeRendered = notCompleted;
+  } else {
+    tasksToBeRendered = Tasks;
+  }
+  //filtering array
+
+  const todos = tasksToBeRendered.map((todo) => {
     return <Todo key={todo.id} todo={todo} />;
   });
 
@@ -72,7 +99,7 @@ export default function TodoList() {
     setShowAddDialog(true);
   }
   //Handlers
-  
+
   return (
     <>
       {/* Add Dialog */}
@@ -158,13 +185,15 @@ export default function TodoList() {
 
             {/* Filter Buttons */}
             <ToggleButtonGroup
+              value={displayedTasksType}
               exclusive
               aria-label="text alignment"
               style={{ marginTop: "30px", direction: "ltr" }}
+              onChange={ChangedDisplayedType}
             >
-              <ToggleButton value="left">غير منجز</ToggleButton>
-              <ToggleButton value="center">منجز</ToggleButton>
-              <ToggleButton value="right">الكل</ToggleButton>
+              <ToggleButton value="notCompleted">غير منجز</ToggleButton>
+              <ToggleButton value="completed">منجز</ToggleButton>
+              <ToggleButton value="all">الكل</ToggleButton>
             </ToggleButtonGroup>
             {/*==== Filter Buttons====*/}
 
